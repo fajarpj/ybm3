@@ -4,7 +4,7 @@
 <section class="page-intro">
     <div class="container narrow">
         <p class="eyebrow">Program yayasan</p>
-        <h1>Program yang bisa langsung dipahami calon mitra</h1>
+        <h1>Program yang mewakili bakti sosial, pembinaan, dan kemandirian</h1>
         <p><?= esc($description) ?></p>
     </div>
 </section>
@@ -15,12 +15,14 @@
             <article class="program-card">
                 <div>
                     <p class="panel__label">Program</p>
-                    <h2><?= esc($program['name']) ?></h2>
-                    <p><?= esc($program['summary']) ?></p>
+                    <h2><?= esc($program['judul']) ?></h2>
+                    <p><?= esc($program['deskripsi']) ?></p>
                 </div>
                 <div class="program-card__impact">
-                    <p class="panel__label">Dampak saat ini</p>
-                    <strong><?= esc($program['impact']) ?></strong>
+                    <p class="panel__label">Target dan progres</p>
+                    <strong>Target Rp<?= number_format((float) $program['target_dana'], 0, ',', '.') ?></strong>
+                    <p>Terkumpul Rp<?= number_format((float) $program['terkumpul'], 0, ',', '.') ?></p>
+                    <p>Status: <?= esc($program['status']) ?></p>
                 </div>
             </article>
         <?php endforeach; ?>

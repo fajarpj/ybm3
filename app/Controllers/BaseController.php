@@ -27,6 +27,18 @@ abstract class BaseController extends Controller
 
     // protected $session;
 
+    protected $helpers = ['form', 'url', 'auth'];
+    protected array $siteData = [
+        'name'         => 'Yayasan Bakti Mulya Masyarakat Mandiri',
+        'shortName'    => 'YB3M Peduli',
+        'tagline'      => 'Menguatkan bakti sosial, pendidikan, dan kemandirian umat melalui pengelolaan donasi yang amanah.',
+        'bankAccounts' => [
+            ['bank' => 'BRI', 'number' => '6877-01-008170-53-3'],
+            ['bank' => 'Mandiri', 'number' => '138-00-1874846-2'],
+        ],
+        'bankHolder'   => 'Yayasan Bakti Mulya Masyarakat Mandiri',
+    ];
+
     /**
      * @return void
      */
@@ -41,5 +53,14 @@ abstract class BaseController extends Controller
 
         // Preload any models, libraries, etc, here.
         // $this->session = service('session');
+    }
+
+    protected function basePageData(array $data = []): array
+    {
+        return array_merge([
+            'site'       => $this->siteData,
+            'currentUri' => service('request')->getUri()->getPath(),
+            'authUser'   => auth_user(),
+        ], $data);
     }
 }

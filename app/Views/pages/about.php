@@ -3,8 +3,8 @@
 <?= $this->section('content') ?>
 <section class="page-intro">
     <div class="container narrow">
-        <p class="eyebrow">Tentang kami</p>
-        <h1>Yayasan yang dibangun untuk kerja lapangan yang konsisten</h1>
+        <p class="eyebrow">Tentang yayasan</p>
+        <h1>Profil Yayasan Bakti Mulya Masyarakat Mandiri</h1>
         <p><?= esc($description) ?></p>
     </div>
 </section>
@@ -12,16 +12,32 @@
 <section class="section">
     <div class="container two-column">
         <article class="panel">
-            <p class="panel__label">Visi</p>
-            <h2>Mendorong komunitas tumbuh dengan akses yang lebih adil.</h2>
-            <p>Kami percaya perubahan sosial yang sehat lahir dari hubungan yang kuat antara warga, relawan, mitra, dan pengelola program.</p>
+            <p class="panel__label">Arah pengabdian</p>
+            <h2>Menjadi yayasan yang hadir dengan bakti, mulya, dan semangat kemandirian masyarakat.</h2>
+            <p>Halaman ini dapat terus dikembangkan untuk memuat sejarah yayasan, legalitas lembaga, struktur pengurus, dan penguatan kepercayaan publik.</p>
         </article>
         <article class="panel">
-            <p class="panel__label">Cara kerja</p>
+            <p class="panel__label">Nilai kerja</p>
             <?php foreach ($principles as $principle): ?>
                 <div class="list-row"><?= esc($principle) ?></div>
             <?php endforeach; ?>
         </article>
+    </div>
+</section>
+
+<section class="section section--muted">
+    <div class="container">
+        <div class="section-heading">
+            <p class="eyebrow">Misi yayasan</p>
+            <h2>Langkah yang membawa manfaat lebih terarah</h2>
+        </div>
+        <div class="card-grid">
+            <?php foreach ($missions as $mission): ?>
+                <article class="info-card">
+                    <p><?= esc($mission) ?></p>
+                </article>
+            <?php endforeach; ?>
+        </div>
     </div>
 </section>
 <?= $this->endSection() ?>
