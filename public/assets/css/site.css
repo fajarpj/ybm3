@@ -29,7 +29,8 @@ html {
 body {
     margin: 0;
     color: var(--text);
-    font-family: "Manrope", sans-serif;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    line-height: 1.7;
     background:
         radial-gradient(circle at top left, rgba(197, 139, 52, 0.18), transparent 28%),
         radial-gradient(circle at top right, rgba(15, 109, 95, 0.14), transparent 24%),
@@ -59,7 +60,7 @@ textarea {
 }
 
 .container {
-    width: min(1160px, calc(100% - 2rem));
+    width: min(1180px, calc(100% - 3.5rem));
     margin: 0 auto;
 }
 
@@ -83,10 +84,14 @@ textarea {
 .impact-grid,
 .two-column,
 .donation-grid,
+.program-hero__grid,
 .section-heading--split,
 .cta-banner,
 .program-card,
-.gallery-grid {
+.gallery-grid,
+.campaign-grid,
+.program-tabs,
+.program-stats {
     display: grid;
     gap: 1.5rem;
 }
@@ -124,13 +129,14 @@ textarea {
 .gallery-card__body h2,
 .hero-slide__overlay h2 {
     margin: 0;
-    font-family: "Instrument Serif", serif;
-    font-weight: 400;
-    line-height: 0.98;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.08;
 }
 
 .brand__name {
-    font-size: 1.9rem;
+    font-size: 1.65rem;
 }
 
 .brand__sub {
@@ -175,6 +181,8 @@ textarea {
     padding: 0.72rem 1rem;
     border-radius: 999px;
     color: var(--muted);
+    font-size: 0.95rem;
+    font-weight: 700;
 }
 
 .site-nav a.is-active,
@@ -253,8 +261,8 @@ textarea {
 }
 
 .hero-slide__overlay h2 {
-    font-size: clamp(2rem, 4vw, 3.2rem);
-    margin-bottom: 0.7rem;
+    font-size: clamp(1.8rem, 3.4vw, 2.75rem);
+    margin-bottom: 0.6rem;
 }
 
 .hero-slider__dots {
@@ -299,8 +307,8 @@ textarea {
 }
 
 .hero h1 {
-    font-size: clamp(2.8rem, 8vw, 5.8rem);
-    max-width: 10ch;
+    font-size: clamp(2.6rem, 6.8vw, 4.9rem);
+    max-width: 11ch;
 }
 
 .hero__greeting,
@@ -320,8 +328,8 @@ textarea {
 .hero__verse,
 .gallery-card__body p {
     color: var(--muted);
-    line-height: 1.8;
-    font-size: 1.02rem;
+    line-height: 1.82;
+    font-size: 1rem;
 }
 
 .hero__lead,
@@ -340,6 +348,71 @@ textarea {
     margin-top: 2rem;
 }
 
+.hero-donation-inline {
+    margin-top: 1.35rem;
+    max-width: 700px;
+    padding: 1.2rem 1.3rem;
+    border: 1px solid rgba(20, 37, 59, 0.08);
+    border-radius: 28px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(251, 247, 240, 0.92));
+    box-shadow: 0 16px 44px rgba(37, 44, 63, 0.08);
+}
+
+.hero-donation-inline__label {
+    margin: 0;
+    color: #5f6f84;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.hero-donation-inline__amount {
+    margin-top: 0.65rem;
+    color: #102341;
+    font-size: clamp(1.9rem, 4vw, 2.85rem);
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    line-height: 1.02;
+}
+
+.hero-donation-inline__target {
+    margin: 0.35rem 0 0;
+    color: #5f6f84;
+    font-size: 0.98rem;
+}
+
+.hero-donation-inline__progress {
+    margin-top: 1rem;
+    height: 0.8rem;
+    background: rgba(17, 35, 59, 0.08);
+}
+
+.hero-donation-inline__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.hero-donation-inline__meta div {
+    display: grid;
+    gap: 0.12rem;
+}
+
+.hero-donation-inline__meta strong {
+    color: #102341;
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+.hero-donation-inline__meta span {
+    color: #5f6f84;
+    font-size: 0.94rem;
+}
+
 .hero__aside {
     display: grid;
     gap: 1rem;
@@ -353,7 +426,7 @@ textarea {
     padding: 0 1.5rem;
     border-radius: 999px;
     border: 1px solid transparent;
-    font-weight: 800;
+    font-weight: 700;
     cursor: pointer;
 }
 
@@ -441,8 +514,8 @@ textarea {
 .metric strong {
     display: block;
     font-size: 1.8rem;
-    font-family: "Instrument Serif", serif;
-    font-weight: 400;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: 800;
 }
 
 .section-heading {
@@ -460,7 +533,22 @@ textarea {
 .program-card h2,
 .gallery-card__body h2,
 .cta-banner h2 {
-    font-size: clamp(2rem, 5vw, 3.4rem);
+    font-size: clamp(1.95rem, 4.1vw, 3.15rem);
+}
+
+.progress-bar--dark span {
+    background: linear-gradient(90deg, #13223d, #1c5ba7);
+}
+
+.button--soft {
+    background: #fff;
+    border-color: rgba(19, 34, 61, 0.12);
+    color: #1c2e4b;
+}
+
+.button--soft:hover {
+    border-color: rgba(19, 34, 61, 0.24);
+    color: #102341;
 }
 
 .card-grid {
@@ -525,6 +613,268 @@ textarea {
     color: var(--accent);
 }
 
+.campaign-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.campaign-card {
+    display: grid;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+}
+
+.campaign-card__image {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+}
+
+.campaign-card__image img {
+    height: 100%;
+    object-fit: cover;
+}
+
+.campaign-card__badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    padding: 0.45rem 0.8rem;
+    border-radius: 999px;
+    background: rgba(15, 109, 95, 0.92);
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.campaign-card__body {
+    display: grid;
+    gap: 1rem;
+    padding: 1.35rem;
+}
+
+.campaign-card__body h2 {
+    margin: 0;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: 1.95rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.12;
+}
+
+.campaign-card__body p {
+    margin: 0;
+}
+
+.campaign-card__footer,
+.progress-meta,
+.amount-pills {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+
+.campaign-card__footer,
+.progress-meta {
+    justify-content: space-between;
+}
+
+.progress-block {
+    display: grid;
+    gap: 0.7rem;
+}
+
+.progress-meta strong {
+    font-size: 1.2rem;
+    color: var(--accent);
+}
+
+.progress-meta span {
+    color: var(--muted);
+    font-size: 0.92rem;
+    text-align: right;
+}
+
+.progress-bar {
+    height: 0.8rem;
+    border-radius: 999px;
+    background: rgba(15, 109, 95, 0.1);
+    overflow: hidden;
+}
+
+.progress-bar span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--primary), #2cb89e);
+}
+
+.program-hero {
+    padding: 3rem 0 4.8rem;
+}
+
+.program-hero__grid {
+    grid-template-columns: minmax(0, 1.3fr) minmax(320px, 0.7fr);
+    align-items: start;
+}
+
+.program-hero__main {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.program-hero__image {
+    overflow: hidden;
+    border-radius: calc(var(--radius) + 6px);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+}
+
+.program-hero__image img {
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+}
+
+.program-summary,
+.donation-card-sticky {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    padding: 1.55rem;
+}
+
+.program-summary h1 {
+    margin: 0;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    line-height: 1.08;
+}
+
+.program-summary__lead {
+    margin: 1rem 0 0;
+    color: var(--muted);
+    font-size: 1.05rem;
+    line-height: 1.8;
+}
+
+.program-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-top: 1.4rem;
+}
+
+.stat-chip {
+    padding: 1rem;
+    border-radius: 22px;
+    background: rgba(15, 109, 95, 0.06);
+}
+
+.stat-chip strong {
+    display: block;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: 1.35rem;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+.stat-chip span {
+    display: block;
+    margin-top: 0.35rem;
+    color: var(--muted);
+    font-size: 0.86rem;
+}
+
+.progress-block--large {
+    margin-top: 1.4rem;
+}
+
+.program-tabs {
+    grid-template-columns: 1fr;
+}
+
+.program-story {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.25rem;
+}
+
+.program-story__item {
+    padding: 1rem 1.1rem;
+    border-radius: 22px;
+    background: rgba(15, 109, 95, 0.05);
+}
+
+.program-story__item strong {
+    display: block;
+    margin-bottom: 0.45rem;
+    color: var(--accent);
+}
+
+.program-story__item p,
+.sidebar-copy {
+    margin: 0;
+}
+
+.program-sidebar {
+    position: relative;
+}
+
+.donation-card-sticky {
+    position: sticky;
+    top: 6rem;
+}
+
+.donor-list {
+    display: grid;
+    gap: 0.9rem;
+}
+
+.donor-row {
+    display: grid;
+    gap: 0.25rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid var(--line);
+}
+
+.donor-row:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.donor-row strong {
+    font-size: 1rem;
+}
+
+.donor-row span {
+    color: var(--muted);
+    font-size: 0.92rem;
+}
+
+.amount-pills {
+    flex-wrap: wrap;
+    margin: 1rem 0;
+}
+
+.amount-pill {
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--accent);
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.amount-pill:hover {
+    border-color: rgba(15, 109, 95, 0.35);
+    color: var(--primary);
+}
+
 .gallery-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
 }
@@ -553,8 +903,10 @@ textarea {
 
 .donation-account {
     font-size: clamp(1.8rem, 5vw, 2.8rem);
-    font-family: "Instrument Serif", serif;
-    line-height: 1;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.06;
     margin: 0.35rem 0 0.6rem;
 }
 
@@ -571,6 +923,20 @@ textarea {
 .form-field span {
     font-weight: 700;
     color: var(--accent);
+}
+
+.gateway-note {
+    padding: 1rem 1.05rem;
+    border: 1px solid rgba(17, 35, 59, 0.08);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.gateway-note p {
+    margin: 0.45rem 0 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.7;
 }
 
 .form-field input,
@@ -629,6 +995,47 @@ textarea {
     grid-template-columns: 1fr;
 }
 
+.admin-stack {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.admin-split,
+.admin-config-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+}
+
+.admin-config-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: 1rem;
+}
+
+.admin-form-actions,
+.admin-table-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.button--small {
+    min-height: 2.6rem;
+    padding: 0 1rem;
+    font-size: 0.92rem;
+}
+
+.button--danger {
+    border-color: rgba(166, 65, 65, 0.18);
+    color: var(--danger);
+}
+
+.button--danger:hover {
+    border-color: rgba(166, 65, 65, 0.34);
+    color: #8f2f2f;
+}
+
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -639,8 +1046,9 @@ textarea {
 .info-card h3 {
     margin: 0.35rem 0 0;
     font-size: 1.75rem;
-    font-family: "Instrument Serif", serif;
-    font-weight: 400;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.03em;
 }
 
 .table-wrap {
@@ -697,28 +1105,67 @@ textarea {
     color: var(--muted);
 }
 
+.whatsapp-float {
+    position: fixed;
+    right: 1.4rem;
+    bottom: 1.4rem;
+    z-index: 110;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.7rem;
+    height: 3.7rem;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #25d366, #19b955);
+    color: #fff;
+    box-shadow: 0 18px 36px rgba(37, 211, 102, 0.34);
+}
+
+.whatsapp-float svg {
+    width: 1.75rem;
+    height: 1.75rem;
+    fill: currentColor;
+}
+
 @media (max-width: 980px) {
     .site-header__inner,
     .hero__grid,
     .impact-grid,
     .two-column,
     .donation-grid,
+    .program-hero__grid,
     .program-card,
     .gallery-grid,
+    .campaign-grid,
     .cta-banner,
     .section-heading--split,
     .site-footer__grid,
     .donation-form,
-    .stats-grid {
+    .stats-grid,
+    .program-stats,
+    .admin-split,
+    .admin-config-grid {
         grid-template-columns: 1fr;
     }
 
     .card-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+
+    .hero-donation-inline {
+        max-width: none;
+    }
+
+    .donation-card-sticky {
+        position: static;
+    }
 }
 
 @media (max-width: 760px) {
+    .container {
+        width: min(100%, calc(100% - 1.5rem));
+    }
+
     .site-header__inner {
         grid-template-columns: 1fr auto;
     }
@@ -821,11 +1268,42 @@ textarea {
     }
 
     .card-grid,
-    .gallery-grid {
+    .gallery-grid,
+    .campaign-grid {
         grid-template-columns: 1fr;
     }
 
     .button {
         width: 100%;
+    }
+
+    .hero-donation-inline {
+        padding: 1rem 1rem 1.05rem;
+    }
+
+    .hero-donation-inline__amount {
+        font-size: clamp(1.7rem, 7vw, 2.2rem);
+    }
+
+    .hero-donation-inline__meta {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        display: grid;
+    }
+
+    .whatsapp-float {
+        right: 1rem;
+        bottom: 1rem;
+        width: 3.35rem;
+        height: 3.35rem;
+    }
+
+    .campaign-card__footer,
+    .progress-meta {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .progress-meta span {
+        text-align: left;
     }
 }

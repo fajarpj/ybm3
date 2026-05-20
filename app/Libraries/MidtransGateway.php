@@ -5,9 +5,15 @@ namespace App\Libraries;
 use Midtrans\Config;
 use Midtrans\Notification;
 use Midtrans\Snap;
+use stdClass;
 
 class MidtransGateway
 {
+    public function merchantId(): string
+    {
+        return (string) env('midtrans.merchantId');
+    }
+
     public function isConfigured(): bool
     {
         return (bool) env('midtrans.serverKey') && (bool) env('midtrans.clientKey');
@@ -32,7 +38,7 @@ class MidtransGateway
         Config::$is3ds = true;
     }
 
-    public function createTransaction(array $payload): array
+    public function createTransaction(array $payload): stdClass
     {
         $this->configure();
 

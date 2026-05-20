@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Libraries\DonationStats;
 use App\Libraries\MidtransGateway;
 use App\Models\DonationModel;
 
@@ -48,6 +49,8 @@ class PaymentController extends BaseController
             'provider_status'=> $transactionStatus,
             'paid_at'        => $paidAt,
         ]);
+
+        (new DonationStats())->syncProgramTotal((int) ($donation['program_id'] ?? 0));
 
         return $this->response->setJSON(['message' => 'OK']);
     }

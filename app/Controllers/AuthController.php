@@ -6,11 +6,17 @@ use App\Models\UserModel;
 
 class AuthController extends BaseController
 {
-    public function login(): string
+    private function publicRegistrationEnabled(): bool
+    {
+        return filter_var(env('auth.allowPublicRegistration', false), FILTER_VALIDATE_BOOL);
+    }
+
+    public function login()
     {
         return view('auth/login', $this->basePageData([
             'title'       => 'Login',
-            'description' => 'Masuk ke dashboard user atau admin.',
+            'description' => 'Masuk ke dashboard sesuai akses akun Anda.',
+            'allowPublicRegistration' => $this->publicRegistrationEnabled(),
         ]));
     }
 
@@ -36,8 +42,12 @@ class AuthController extends BaseController
         return redirect()->to($user['role'] === 'admin' ? site_url('admin') : site_url('dashboard'));
     }
 
-    public function register(): string
+    public function register()
     {
+        if (! $this->publicRegistrationEnabled()) {
+            return redirect()->to(site_url('login'))->with('error', 'Pendaftaran akun publik saat ini dinonaktifkan. Silakan hubungi pengurus yayasan.');
+        }
+
         return view('auth/register', $this->basePageData([
             'title'       => 'Daftar',
             'description' => 'Buat akun untuk memantau riwayat donasi.',
@@ -46,6 +56,10 @@ class AuthController extends BaseController
 
     public function attemptRegister()
     {
+        if (! $this->publicRegistrationEnabled()) {
+            return redirect()->to(site_url('login'))->with('error', 'Pendaftaran akun publik saat ini dinonaktifkan.');
+        }
+
         $rules = [
             'name'     => 'required|min_length[3]',
             'email'    => 'required|valid_email|is_unique[users.email]',

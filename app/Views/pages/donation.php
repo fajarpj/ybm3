@@ -42,7 +42,7 @@
     <div class="container two-column">
         <article class="panel">
             <p class="panel__label">Form donasi</p>
-            <h2>Midtrans sebagai gateway utama</h2>
+            <h2>Midtrans Snap sebagai gateway utama</h2>
 
             <?php if (session()->getFlashdata('success')): ?>
                 <div class="alert alert--success"><?= esc(session()->getFlashdata('success')) ?></div>
@@ -81,16 +81,23 @@
                 </label>
                 <label class="form-field">
                     <span>Payment gateway</span>
-                    <select name="payment_gateway">
+                    <select name="payment_gateway" data-gateway-select>
                         <?php foreach ($gatewayOptions as $gateway): ?>
                             <option value="<?= esc($gateway) ?>" <?= old('payment_gateway') === $gateway ? 'selected' : '' ?>><?= esc($gateway) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </label>
-                <label class="form-field">
-                    <span>Kanal pembayaran</span>
+
+                <div class="form-field form-field--full gateway-note" data-midtrans-note>
+                    <span>Metode pembayaran Midtrans</span>
+                    <p>Setelah klik lanjut, Midtrans Snap akan menampilkan metode yang aktif di akun Anda, seperti QRIS, Virtual Account bank, GoPay, ShopeePay, dan metode lain yang tersedia.</p>
+                </div>
+
+                <label class="form-field" data-manual-channel-field hidden>
+                    <span>Rekening tujuan transfer manual</span>
                     <select name="payment_channel">
-                        <?php foreach ($channelOptions as $channel): ?>
+                        <option value="">Pilih rekening tujuan</option>
+                        <?php foreach ($manualChannelOptions as $channel): ?>
                             <option value="<?= esc($channel) ?>" <?= old('payment_channel') === $channel ? 'selected' : '' ?>><?= esc($channel) ?></option>
                         <?php endforeach; ?>
                     </select>
@@ -122,4 +129,30 @@
         </article>
     </div>
 </section>
+
+<script>
+    (() => {
+        const gatewaySelect = document.querySelector('[data-gateway-select]');
+        const manualField = document.querySelector('[data-manual-channel-field]');
+        const midtransNote = document.querySelector('[data-midtrans-note]');
+        const manualSelect = manualField?.querySelector('select');
+
+        if (!gatewaySelect || !manualField || !midtransNote) {
+            return;
+        }
+
+        const syncGatewayUI = () => {
+            const isMidtrans = gatewaySelect.value.toLowerCase().includes('midtrans');
+            manualField.hidden = isMidtrans;
+            midtransNote.hidden = !isMidtrans;
+
+            if (isMidtrans && manualSelect) {
+                manualSelect.value = '';
+            }
+        };
+
+        gatewaySelect.addEventListener('change', syncGatewayUI);
+        syncGatewayUI();
+    })();
+</script>
 <?= $this->endSection() ?>
