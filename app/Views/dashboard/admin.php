@@ -91,7 +91,7 @@
             <article class="panel">
                 <p class="panel__label"><?= $editingProgram ? 'Edit Program' : 'Tambah Program' ?></p>
                 <h2><?= $editingProgram ? 'Perbarui campaign yayasan' : 'Buat program donasi baru' ?></h2>
-                <form class="donation-form" action="<?= $editingProgram ? site_url('admin/programs/' . $editingProgram['id']) : site_url('admin/programs') ?>" method="post">
+                <form class="donation-form" action="<?= $editingProgram ? site_url('admin/programs/' . $editingProgram['id']) : site_url('admin/programs') ?>" method="post" enctype="multipart/form-data">
                     <?= csrf_field() ?>
                     <label class="form-field">
                         <span>Judul program</span>
@@ -107,7 +107,7 @@
                     </label>
                     <label class="form-field">
                         <span>Target dana</span>
-                        <input type="number" name="target_dana" min="1" step="1000" value="<?= esc(old('target_dana', $editingProgram['target_dana'] ?? '')) ?>" placeholder="100000000">
+                        <input type="number" name="target_dana" min="1000" step="1000" value="<?= esc(old('target_dana', $editingProgram['target_dana'] ?? '')) ?>" placeholder="100000000">
                     </label>
                     <label class="form-field">
                         <span>Status</span>
@@ -119,9 +119,16 @@
                         </select>
                     </label>
                     <label class="form-field form-field--full">
-                        <span>Path gambar</span>
-                        <input type="text" name="gambar" value="<?= esc(old('gambar', $editingProgram['gambar'] ?? 'assets/images/gallery/home1 (1).jpeg')) ?>" placeholder="assets/images/gallery/home1 (1).jpeg">
+                        <span>Upload gambar program</span>
+                        <input type="file" name="gambar_file" accept=".jpg,.jpeg,.png,.webp">
                     </label>
+                    <?php if (! empty($editingProgram['gambar'])): ?>
+                        <div class="admin-upload-note form-field--full">
+                            <strong>Gambar saat ini</strong>
+                            <p><?= esc($editingProgram['gambar']) ?></p>
+                            <img src="<?= base_url($editingProgram['gambar']) ?>" alt="<?= esc($editingProgram['judul']) ?>">
+                        </div>
+                    <?php endif; ?>
                     <div class="admin-form-actions form-field--full">
                         <button class="button button--primary" type="submit"><?= $editingProgram ? 'Simpan Perubahan Program' : 'Tambah Program' ?></button>
                         <?php if ($editingProgram): ?>
@@ -134,7 +141,7 @@
             <article class="panel">
                 <p class="panel__label"><?= $editingGallery ? 'Edit Galeri' : 'Tambah Galeri' ?></p>
                 <h2><?= $editingGallery ? 'Perbarui dokumentasi visual' : 'Tambah dokumentasi baru' ?></h2>
-                <form class="donation-form" action="<?= $editingGallery ? site_url('admin/galleries/' . $editingGallery['id']) : site_url('admin/galleries') ?>" method="post">
+                <form class="donation-form" action="<?= $editingGallery ? site_url('admin/galleries/' . $editingGallery['id']) : site_url('admin/galleries') ?>" method="post" enctype="multipart/form-data">
                     <?= csrf_field() ?>
                     <label class="form-field">
                         <span>Judul</span>
@@ -166,9 +173,16 @@
                         </select>
                     </label>
                     <label class="form-field form-field--full">
-                        <span>Path gambar</span>
-                        <input type="text" name="image" value="<?= esc(old('image', $editingGallery['image'] ?? 'assets/images/gallery/galery1.jpeg')) ?>" placeholder="assets/images/gallery/galery1.jpeg">
+                        <span>Upload gambar galeri</span>
+                        <input type="file" name="image_file" accept=".jpg,.jpeg,.png,.webp">
                     </label>
+                    <?php if (! empty($editingGallery['image'])): ?>
+                        <div class="admin-upload-note form-field--full">
+                            <strong>Gambar saat ini</strong>
+                            <p><?= esc($editingGallery['image']) ?></p>
+                            <img src="<?= base_url($editingGallery['image']) ?>" alt="<?= esc($editingGallery['title']) ?>">
+                        </div>
+                    <?php endif; ?>
                     <div class="admin-form-actions form-field--full">
                         <button class="button button--primary" type="submit"><?= $editingGallery ? 'Simpan Perubahan Galeri' : 'Tambah Galeri' ?></button>
                         <?php if ($editingGallery): ?>

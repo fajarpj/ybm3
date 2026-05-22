@@ -32,11 +32,21 @@ abstract class BaseController extends Controller
         'name'         => 'Yayasan Bakti Mulya Masyarakat Mandiri',
         'shortName'    => 'YB3M Peduli',
         'tagline'      => 'Menguatkan bakti sosial, pendidikan, dan kemandirian umat melalui pengelolaan donasi yang amanah.',
+        'address'      => 'Sekretariat Yayasan Bakti Mulya Masyarakat Mandiri, Indonesia.',
+        'officeNote'   => 'Informasi operasional, program, dan penyaluran manfaat dikelola langsung oleh pengurus yayasan.',
+        'email'        => 'admin@yb3mpeduli.org',
+        'phone'        => '0853 5340 0700',
+        'website'      => 'ybkb.org',
         'bankAccounts' => [
             ['bank' => 'BRI', 'number' => '6877-01-008170-53-3'],
             ['bank' => 'Mandiri', 'number' => '138-00-1874846-2'],
         ],
         'bankHolder'   => 'Yayasan Bakti Mulya Masyarakat Mandiri',
+        'socials'      => [
+            ['label' => 'Website', 'value' => 'ybkb.org', 'url' => 'https://ybkb.org'],
+            ['label' => 'YouTube', 'value' => '@ybkbindonesia', 'url' => 'https://www.youtube.com/@ybkbindonesia'],
+            ['label' => 'Instagram', 'value' => '@ybkbindonesia', 'url' => 'https://www.instagram.com/ybkbindonesia'],
+        ],
     ];
 
     /**

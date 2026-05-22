@@ -1,15 +1,15 @@
 <?= $this->extend('layouts/main') ?>
 
 <?= $this->section('content') ?>
-<section class="page-intro">
-    <div class="container narrow">
+<section class="page-intro page-intro--compact">
+    <div class="container narrow page-intro__stack">
         <p class="eyebrow">Gallery</p>
         <h1>Dokumentasi kegiatan dan jejak manfaat yayasan</h1>
         <p><?= esc($description) ?></p>
     </div>
 </section>
 
-<section class="section">
+<section class="section section--intro-linked">
     <div class="container gallery-grid">
         <?php foreach ($galleries as $gallery): ?>
             <article class="gallery-card">

@@ -14,11 +14,21 @@ class Home extends BaseController
         'name'         => 'Yayasan Bakti Mulya Masyarakat Mandiri',
         'shortName'    => 'YB3M Peduli',
         'tagline'      => 'Menguatkan bakti sosial, pendidikan, dan kemandirian umat melalui pengelolaan donasi yang amanah.',
+        'address'      => 'Sekretariat Yayasan Bakti Mulya Masyarakat Mandiri, Indonesia.',
+        'officeNote'   => 'Informasi operasional, program, dan penyaluran manfaat dikelola langsung oleh pengurus yayasan.',
+        'email'        => 'admin@yb3mpeduli.org',
+        'phone'        => '0853 5340 0700',
+        'website'      => 'ybkb.org',
         'bankAccounts' => [
             ['bank' => 'BRI', 'number' => '6877-01-008170-53-3'],
             ['bank' => 'Mandiri', 'number' => '138-00-1874846-2'],
         ],
         'bankHolder'   => 'Yayasan Bakti Mulya Masyarakat Mandiri',
+        'socials'      => [
+            ['label' => 'Website', 'value' => 'ybkb.org', 'url' => 'https://ybkb.org'],
+            ['label' => 'YouTube', 'value' => '@ybkbindonesia', 'url' => 'https://www.youtube.com/@ybkbindonesia'],
+            ['label' => 'Instagram', 'value' => '@ybkbindonesia', 'url' => 'https://www.instagram.com/ybkbindonesia'],
+        ],
         'heroMetrics'  => [
             ['value' => 'Amanah', 'label' => 'pengelolaan dana yang tertata'],
             ['value' => 'Peduli', 'label' => 'program sosial dan pembinaan umat'],
@@ -143,8 +153,7 @@ class Home extends BaseController
             'program'          => $program,
             'recentDonors'     => $recentDonors,
             'midtransReady'    => $midtrans->isConfigured(),
-            'gatewayOptions'   => ['Midtrans Snap', 'Transfer Manual'],
-            'manualChannelOptions' => ['BRI Transfer', 'Mandiri Transfer'],
+            'gatewayOptions'   => ['Midtrans Snap'],
             'suggestedAmounts' => [50000, 100000, 250000, 500000],
         ]));
     }
@@ -177,17 +186,137 @@ class Home extends BaseController
             'programOptions'  => $programs,
             'donationSteps'   => [
                 'Login atau daftar agar donasi otomatis tercatat di dashboard user.',
-                'Pilih nominal dan program, lalu lanjutkan pembayaran melalui Midtrans Snap atau transfer manual.',
-                'Admin dapat memantau status transaksi dari dashboard secara langsung.',
+                'Pilih nominal dan program, lalu lanjutkan pembayaran melalui Midtrans Snap.',
+                'Admin dan user dapat memantau status transaksi dari dashboard secara langsung.',
             ],
-            'paymentChannels' => [
-                'Midtrans Snap akan menampilkan metode aktif seperti QRIS, Virtual Account, GoPay, ShopeePay, dan metode lain sesuai akun merchant Anda.',
-                'Transfer manual tetap disediakan sebagai cadangan operasional ke rekening resmi yayasan.',
-                'Status pembayaran dapat diperbarui lewat notifikasi gateway dan dashboard admin.',
-            ],
-            'gatewayOptions'  => ['Midtrans Snap', 'Transfer Manual'],
-            'manualChannelOptions' => ['BRI Transfer', 'Mandiri Transfer'],
             'midtransReady'   => $midtrans->isConfigured(),
+        ]));
+    }
+
+    public function privacyPolicy(): string
+    {
+        return view('pages/privacy_policy', $this->pageData([
+            'title'       => 'Kebijakan Privasi',
+            'description' => 'Penjelasan cara Yayasan Bakti Mulya Masyarakat Mandiri mengelola data pengunjung, donatur, dan pengguna dashboard.',
+            'sections'    => [
+                [
+                    'title'   => 'Data yang kami kumpulkan',
+                    'content' => [
+                        'Kami dapat mengumpulkan data identitas dasar seperti nama, email, nomor telepon, serta data transaksi donasi yang dikirimkan melalui website.',
+                        'Data teknis seperti alamat IP, jenis browser, dan aktivitas dasar penggunaan website dapat tercatat untuk kebutuhan keamanan, audit, dan peningkatan layanan.',
+                    ],
+                ],
+                [
+                    'title'   => 'Tujuan penggunaan data',
+                    'content' => [
+                        'Data digunakan untuk mencatat donasi, memproses pembayaran melalui payment gateway resmi, menampilkan riwayat transaksi kepada pengguna, dan mendukung administrasi yayasan.',
+                        'Kami juga dapat menggunakan data kontak untuk memberikan konfirmasi transaksi, pembaruan status donasi, atau informasi layanan yang relevan dengan aktivitas pengguna.',
+                    ],
+                ],
+                [
+                    'title'   => 'Perlindungan dan penyimpanan data',
+                    'content' => [
+                        'Kami berupaya menerapkan langkah teknis dan administratif yang wajar untuk melindungi data pengguna dari akses tanpa izin, perubahan, penyalahgunaan, atau kebocoran.',
+                        'Akses ke data admin dan data pengguna dibatasi sesuai peran dan kebutuhan operasional yayasan.',
+                    ],
+                ],
+                [
+                    'title'   => 'Pembagian data kepada pihak ketiga',
+                    'content' => [
+                        'Kami tidak memperjualbelikan data pribadi pengguna. Data tertentu dapat diteruskan secara terbatas kepada penyedia layanan resmi seperti payment gateway untuk menyelesaikan proses transaksi.',
+                        'Pihak ketiga yang terlibat hanya menerima data yang diperlukan untuk menjalankan layanan yang diminta pengguna.',
+                    ],
+                ],
+                [
+                    'title'   => 'Hak pengguna',
+                    'content' => [
+                        'Pengguna dapat meminta pembaruan data akun, koreksi informasi, atau penonaktifan akun sesuai kebijakan operasional yayasan dan ketentuan hukum yang berlaku.',
+                        'Untuk pertanyaan terkait data pribadi, pengguna dapat menghubungi pengurus yayasan melalui kanal resmi yang tercantum di website.',
+                    ],
+                ],
+            ],
+        ]));
+    }
+
+    public function terms(): string
+    {
+        return view('pages/terms', $this->pageData([
+            'title'       => 'Syarat dan Ketentuan',
+            'description' => 'Ketentuan penggunaan website, layanan donasi, dan dashboard pengguna Yayasan Bakti Mulya Masyarakat Mandiri.',
+            'sections'    => [
+                [
+                    'title'   => 'Penggunaan website',
+                    'content' => [
+                        'Website ini disediakan sebagai sarana informasi yayasan, publikasi program, dokumentasi kegiatan, dan penyaluran donasi secara digital.',
+                        'Pengguna wajib menggunakan website secara sah, wajar, dan tidak melakukan tindakan yang merugikan sistem, yayasan, maupun pihak lain.',
+                    ],
+                ],
+                [
+                    'title'   => 'Akun pengguna',
+                    'content' => [
+                        'Pengguna yang membuat akun bertanggung jawab menjaga kerahasiaan kredensial login dan seluruh aktivitas yang terjadi pada akunnya.',
+                        'Yayasan berhak menangguhkan atau menonaktifkan akun yang digunakan untuk pelanggaran, penyalahgunaan, atau aktivitas yang membahayakan sistem.',
+                    ],
+                ],
+                [
+                    'title'   => 'Ketentuan donasi',
+                    'content' => [
+                        'Donasi yang dilakukan melalui website akan diproses melalui payment gateway resmi atau mekanisme lain yang diumumkan oleh yayasan.',
+                        'Pengguna wajib memastikan data donasi, nominal, dan program tujuan yang dipilih sudah sesuai sebelum menyelesaikan pembayaran.',
+                    ],
+                ],
+                [
+                    'title'   => 'Ketersediaan layanan',
+                    'content' => [
+                        'Yayasan berupaya menjaga website tetap tersedia, namun tidak menjamin bahwa layanan akan selalu bebas gangguan, keterlambatan, atau kesalahan teknis.',
+                        'Perubahan fitur, konten, atau alur layanan dapat dilakukan sewaktu-waktu untuk kebutuhan operasional, keamanan, atau pengembangan sistem.',
+                    ],
+                ],
+                [
+                    'title'   => 'Batas tanggung jawab',
+                    'content' => [
+                        'Yayasan tidak bertanggung jawab atas kerugian yang timbul akibat kelalaian pengguna menjaga akun, penggunaan perangkat yang tidak aman, atau gangguan pihak ketiga di luar kendali wajar yayasan.',
+                        'Dalam hal terjadi sengketa atau kendala transaksi, pengguna dianjurkan segera menghubungi pengurus melalui kanal resmi website.',
+                    ],
+                ],
+            ],
+        ]));
+    }
+
+    public function refundPolicy(): string
+    {
+        return view('pages/refund_policy', $this->pageData([
+            'title'       => 'Kebijakan Pengembalian Dana',
+            'description' => 'Informasi dasar mengenai kebijakan pengembalian dana untuk transaksi donasi yang diproses melalui website yayasan.',
+            'sections'    => [
+                [
+                    'title'   => 'Prinsip umum',
+                    'content' => [
+                        'Donasi yang telah berhasil dibayarkan pada dasarnya bersifat sukarela dan ditujukan untuk mendukung program yayasan yang dipilih pengguna.',
+                        'Yayasan akan meninjau permohonan pengembalian dana secara terbatas untuk kondisi tertentu yang dapat dibuktikan secara wajar.',
+                    ],
+                ],
+                [
+                    'title'   => 'Kondisi yang dapat dipertimbangkan',
+                    'content' => [
+                        'Transaksi ganda yang tidak disengaja, kesalahan nominal akibat gangguan sistem, atau pembayaran yang tercatat tidak sesuai dengan instruksi pengguna dapat diajukan untuk peninjauan.',
+                        'Permohonan harus disampaikan secepat mungkin disertai bukti transaksi, identitas donatur, dan penjelasan singkat mengenai kendala yang terjadi.',
+                    ],
+                ],
+                [
+                    'title'   => 'Proses peninjauan',
+                    'content' => [
+                        'Setiap permohonan akan diverifikasi oleh pengurus yayasan berdasarkan data transaksi internal, catatan payment gateway, dan bukti pendukung dari pengguna.',
+                        'Yayasan berhak meminta informasi tambahan sebelum memberikan keputusan akhir atas permohonan tersebut.',
+                    ],
+                ],
+                [
+                    'title'   => 'Cara menghubungi yayasan',
+                    'content' => [
+                        'Untuk pertanyaan mengenai kebijakan ini atau permohonan pengembalian dana, pengguna dapat menghubungi pengurus yayasan melalui email atau nomor resmi yang tercantum di website.',
+                    ],
+                ],
+            ],
         ]));
     }
 
@@ -207,12 +336,22 @@ class Home extends BaseController
         $donationModel = new DonationModel();
         $midtrans = new MidtransGateway();
         $user = auth_user();
-        $selectedGateway = (string) $this->request->getPost('payment_gateway');
-        $isMidtrans = stripos($selectedGateway, 'midtrans') !== false;
-        $paymentChannel = $isMidtrans ? 'snap_auto' : (string) $this->request->getPost('payment_channel');
+        $selectedGateway = 'Midtrans Snap';
+        $paymentChannel = 'snap_auto';
+        $programTitle = 'Donasi Umum';
 
-        if (! $isMidtrans && $paymentChannel === '') {
-            return redirect()->back()->withInput()->with('error', 'Pilih rekening tujuan untuk transfer manual.');
+        if ($programId) {
+            $program = (new ProgramModel())->find($programId);
+
+            if (! $program) {
+                return redirect()->back()->withInput()->with('error', 'Program donasi tidak ditemukan.');
+            }
+
+            if (($program['status'] ?? 'aktif') !== 'aktif') {
+                return redirect()->back()->withInput()->with('error', 'Program ini sudah selesai dan tidak menerima donasi baru.');
+            }
+
+            $programTitle = $program['judul'] ?? $programTitle;
         }
 
         $orderId = 'YB3M-' . date('YmdHis') . '-' . random_int(1000, 9999);
@@ -225,7 +364,7 @@ class Home extends BaseController
             'program_id'       => $programId,
             'amount'           => $this->request->getPost('amount'),
             'payment_method'   => $paymentChannel,
-            'provider'         => $isMidtrans ? 'midtrans' : 'manual',
+            'provider'         => 'midtrans',
             'order_id'         => $orderId,
             'payment_gateway'  => $selectedGateway,
             'payment_channel'  => $paymentChannel,
@@ -235,53 +374,45 @@ class Home extends BaseController
             'message'          => $this->request->getPost('message'),
         ], true);
 
-        if ($isMidtrans) {
-            if (! $midtrans->isConfigured()) {
-                return redirect()->to(site_url('donasi'))->with('error', 'Midtrans belum dikonfigurasi. Isi server key dan client key terlebih dahulu.');
-            }
-
-            $programTitle = 'Donasi Umum';
-            if ($programId) {
-                $program = (new ProgramModel())->find($programId);
-                $programTitle = $program['judul'] ?? $programTitle;
-            }
-
-            try {
-                $transaction = $midtrans->createTransaction([
-                    'transaction_details' => [
-                        'order_id'     => $orderId,
-                        'gross_amount' => (int) $this->request->getPost('amount'),
-                    ],
-                    'item_details' => [[
-                        'id'       => (string) ($programId ?: 'general'),
-                        'price'    => (int) $this->request->getPost('amount'),
-                        'quantity' => 1,
-                        'name'     => $programTitle,
-                    ]],
-                    'customer_details' => [
-                        'first_name' => $this->request->getPost('donor_name'),
-                        'email'      => $user['email'] ?? ('guest+' . $orderId . '@yb3m.local'),
-                        'phone'      => $this->request->getPost('donor_phone'),
-                    ],
-                    'callbacks' => [
-                        'finish' => site_url('payment/finish'),
-                    ],
-                ]);
-            } catch (\Throwable $exception) {
-                return redirect()->to(site_url('donasi'))->with('error', 'Gagal membuat transaksi Midtrans: ' . $exception->getMessage());
-            }
-
-            $donationModel->update($donationId, [
-                'snap_token'  => $transaction->token ?? null,
-                'payment_url' => $transaction->redirect_url ?? null,
-            ]);
-
-            if (! empty($transaction->redirect_url)) {
-                return redirect()->to($transaction->redirect_url);
-            }
+        if (! $midtrans->isConfigured()) {
+            return redirect()->to(site_url('donasi'))->with('error', 'Midtrans belum dikonfigurasi. Isi server key dan client key terlebih dahulu.');
         }
 
-        return redirect()->to(site_url('donasi'))->with('success', 'Donasi berhasil dicatat. Silakan lanjutkan pembayaran sesuai metode yang dipilih.');
+        try {
+            $transaction = $midtrans->createTransaction([
+                'transaction_details' => [
+                    'order_id'     => $orderId,
+                    'gross_amount' => (int) $this->request->getPost('amount'),
+                ],
+                'item_details' => [[
+                    'id'       => (string) ($programId ?: 'general'),
+                    'price'    => (int) $this->request->getPost('amount'),
+                    'quantity' => 1,
+                    'name'     => $programTitle,
+                ]],
+                'customer_details' => [
+                    'first_name' => $this->request->getPost('donor_name'),
+                    'email'      => $user['email'] ?? ('guest+' . $orderId . '@yb3m.local'),
+                    'phone'      => $this->request->getPost('donor_phone'),
+                ],
+                'callbacks' => [
+                    'finish' => site_url('payment/finish'),
+                ],
+            ]);
+        } catch (\Throwable $exception) {
+            return redirect()->to(site_url('donasi'))->with('error', 'Gagal membuat transaksi Midtrans: ' . $exception->getMessage());
+        }
+
+        $donationModel->update($donationId, [
+            'snap_token'  => $transaction->token ?? null,
+            'payment_url' => $transaction->redirect_url ?? null,
+        ]);
+
+        if (! empty($transaction->redirect_url)) {
+            return redirect()->to($transaction->redirect_url);
+        }
+
+        return redirect()->to(site_url('donasi'))->with('success', 'Donasi berhasil dicatat. Silakan lanjutkan pembayaran melalui Midtrans Snap.');
     }
 
     private function pageData(array $data = []): array

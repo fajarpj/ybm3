@@ -1,15 +1,15 @@
 <?= $this->extend('layouts/main') ?>
 
 <?= $this->section('content') ?>
-<section class="page-intro">
-    <div class="container narrow">
+<section class="page-intro page-intro--compact">
+    <div class="container narrow page-intro__stack">
         <p class="eyebrow">Tentang yayasan</p>
         <h1>Profil Yayasan Bakti Mulya Masyarakat Mandiri</h1>
         <p><?= esc($description) ?></p>
     </div>
 </section>
 
-<section class="section">
+<section class="section section--intro-linked">
     <div class="container two-column">
         <article class="panel">
             <p class="panel__label">Arah pengabdian</p>

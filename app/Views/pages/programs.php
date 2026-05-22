@@ -1,15 +1,15 @@
 <?= $this->extend('layouts/main') ?>
 
 <?= $this->section('content') ?>
-<section class="page-intro">
-    <div class="container narrow">
+<section class="page-intro page-intro--compact">
+    <div class="container narrow page-intro__stack">
         <p class="eyebrow">Program yayasan</p>
         <h1>Campaign donasi dan program manfaat</h1>
         <p><?= esc($description) ?></p>
     </div>
 </section>
 
-<section class="section">
+<section class="section section--intro-linked">
     <div class="container campaign-grid">
         <?php foreach ($programs as $program): ?>
             <article class="campaign-card">

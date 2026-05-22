@@ -11,6 +11,9 @@ use App\Models\UserModel;
 
 class DashboardController extends BaseController
 {
+    private const PROGRAM_UPLOAD_DIR = 'assets/images/uploads/programs';
+    private const GALLERY_UPLOAD_DIR = 'assets/images/uploads/galleries';
+
     public function user(): string
     {
         $user = auth_user();
@@ -47,8 +50,8 @@ class DashboardController extends BaseController
             'judul'       => 'required|min_length[5]|max_length[180]',
             'deskripsi'   => 'required|min_length[20]',
             'target_dana' => 'required|decimal|greater_than[0]',
-            'gambar'      => 'required|max_length[255]',
             'status'      => 'required|in_list[aktif,selesai]',
+            'gambar_file' => 'uploaded[gambar_file]|is_image[gambar_file]|mime_in[gambar_file,image/jpg,image/jpeg,image/png,image/webp]|max_size[gambar_file,4096]',
         ];
 
         if (! $this->validate($rules)) {
@@ -60,13 +63,18 @@ class DashboardController extends BaseController
             (string) $this->request->getPost('slug'),
             (string) $this->request->getPost('judul')
         );
+        try {
+            $imagePath = $this->storeUploadedImage('gambar_file', self::PROGRAM_UPLOAD_DIR);
+        } catch (\RuntimeException $exception) {
+            return redirect()->back()->withInput()->with('error', $exception->getMessage());
+        }
 
         (new ProgramModel())->insert([
             'judul'       => $this->request->getPost('judul'),
             'slug'        => $slug,
             'deskripsi'   => $this->request->getPost('deskripsi'),
             'target_dana' => $this->request->getPost('target_dana'),
-            'gambar'      => $this->request->getPost('gambar'),
+            'gambar'      => $imagePath,
             'status'      => $this->request->getPost('status'),
             'terkumpul'   => 0,
         ]);
@@ -87,9 +95,13 @@ class DashboardController extends BaseController
             'judul'       => 'required|min_length[5]|max_length[180]',
             'deskripsi'   => 'required|min_length[20]',
             'target_dana' => 'required|decimal|greater_than[0]',
-            'gambar'      => 'required|max_length[255]',
             'status'      => 'required|in_list[aktif,selesai]',
         ];
+
+        $programFile = $this->request->getFile('gambar_file');
+        if ($programFile && $programFile->getError() !== UPLOAD_ERR_NO_FILE) {
+            $rules['gambar_file'] = 'is_image[gambar_file]|mime_in[gambar_file,image/jpg,image/jpeg,image/png,image/webp]|max_size[gambar_file,4096]';
+        }
 
         if (! $this->validate($rules)) {
             return redirect()->back()->withInput()->with('error', 'Perubahan program belum valid.');
@@ -101,13 +113,18 @@ class DashboardController extends BaseController
             (string) $this->request->getPost('judul'),
             $id
         );
+        try {
+            $imagePath = $this->storeUploadedImage('gambar_file', self::PROGRAM_UPLOAD_DIR, $program['gambar'] ?? null);
+        } catch (\RuntimeException $exception) {
+            return redirect()->back()->withInput()->with('error', $exception->getMessage());
+        }
 
         $programModel->update($id, [
             'judul'       => $this->request->getPost('judul'),
             'slug'        => $slug,
             'deskripsi'   => $this->request->getPost('deskripsi'),
             'target_dana' => $this->request->getPost('target_dana'),
-            'gambar'      => $this->request->getPost('gambar'),
+            'gambar'      => $imagePath,
             'status'      => $this->request->getPost('status'),
         ]);
 
@@ -143,10 +160,10 @@ class DashboardController extends BaseController
     public function saveGallery()
     {
         $rules = [
-            'title'    => 'required|min_length[3]|max_length[180]',
-            'image'    => 'required|max_length[255]',
-            'caption'  => 'required|min_length[10]',
-            'category' => 'required|in_list[home,gallery]',
+            'title'      => 'required|min_length[3]|max_length[180]',
+            'caption'    => 'required|min_length[10]',
+            'category'   => 'required|in_list[home,gallery]',
+            'image_file' => 'uploaded[image_file]|is_image[image_file]|mime_in[image_file,image/jpg,image/jpeg,image/png,image/webp]|max_size[image_file,4096]',
         ];
 
         if (! $this->validate($rules)) {
@@ -158,11 +175,16 @@ class DashboardController extends BaseController
             (string) $this->request->getPost('slug'),
             (string) $this->request->getPost('title')
         );
+        try {
+            $imagePath = $this->storeUploadedImage('image_file', self::GALLERY_UPLOAD_DIR);
+        } catch (\RuntimeException $exception) {
+            return redirect()->back()->withInput()->with('error', $exception->getMessage());
+        }
 
         (new GalleryModel())->insert([
             'title'        => $this->request->getPost('title'),
             'slug'         => $slug,
-            'image'        => $this->request->getPost('image'),
+            'image'        => $imagePath,
             'caption'      => $this->request->getPost('caption'),
             'category'     => $this->request->getPost('category'),
             'is_published' => $this->request->getPost('is_published') ? 1 : 0,
@@ -181,11 +203,15 @@ class DashboardController extends BaseController
         }
 
         $rules = [
-            'title'    => 'required|min_length[3]|max_length[180]',
-            'image'    => 'required|max_length[255]',
-            'caption'  => 'required|min_length[10]',
-            'category' => 'required|in_list[home,gallery]',
+            'title'      => 'required|min_length[3]|max_length[180]',
+            'caption'    => 'required|min_length[10]',
+            'category'   => 'required|in_list[home,gallery]',
         ];
+
+        $galleryFile = $this->request->getFile('image_file');
+        if ($galleryFile && $galleryFile->getError() !== UPLOAD_ERR_NO_FILE) {
+            $rules['image_file'] = 'is_image[image_file]|mime_in[image_file,image/jpg,image/jpeg,image/png,image/webp]|max_size[image_file,4096]';
+        }
 
         if (! $this->validate($rules)) {
             return redirect()->back()->withInput()->with('error', 'Perubahan galeri belum valid.');
@@ -197,11 +223,16 @@ class DashboardController extends BaseController
             (string) $this->request->getPost('title'),
             $id
         );
+        try {
+            $imagePath = $this->storeUploadedImage('image_file', self::GALLERY_UPLOAD_DIR, $gallery['image'] ?? null);
+        } catch (\RuntimeException $exception) {
+            return redirect()->back()->withInput()->with('error', $exception->getMessage());
+        }
 
         $galleryModel->update($id, [
             'title'        => $this->request->getPost('title'),
             'slug'         => $slug,
-            'image'        => $this->request->getPost('image'),
+            'image'        => $imagePath,
             'caption'      => $this->request->getPost('caption'),
             'category'     => $this->request->getPost('category'),
             'is_published' => $this->request->getPost('is_published') ? 1 : 0,
@@ -489,5 +520,29 @@ class DashboardController extends BaseController
             $counter++;
             $slug = $baseSlug . '-' . $counter;
         }
+    }
+
+    private function storeUploadedImage(string $fieldName, string $relativeDirectory, ?string $existingPath = null): string
+    {
+        $file = $this->request->getFile($fieldName);
+
+        if ($file && $file->isValid() && ! $file->hasMoved()) {
+            $targetDirectory = rtrim(FCPATH . str_replace('/', DIRECTORY_SEPARATOR, $relativeDirectory), DIRECTORY_SEPARATOR);
+
+            if (! is_dir($targetDirectory)) {
+                mkdir($targetDirectory, 0777, true);
+            }
+
+            $newName = $file->getRandomName();
+            $file->move($targetDirectory, $newName);
+
+            return trim($relativeDirectory, '/') . '/' . $newName;
+        }
+
+        if ($existingPath) {
+            return $existingPath;
+        }
+
+        throw new \RuntimeException('File gambar belum dipilih atau gagal diunggah.');
     }
 }
