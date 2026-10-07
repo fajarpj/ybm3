@@ -15,6 +15,7 @@
             <?php if (session()->getFlashdata('error')): ?>
                 <div class="alert alert--error"><?= esc(session()->getFlashdata('error')) ?></div>
             <?php endif; ?>
+            <p class="auth-copy">Form ini untuk akun user/donatur. Email admin Google tidak bisa didaftarkan di sini.</p>
             <form class="donation-form donation-form--single" action="<?= site_url('register') ?>" method="post">
                 <?= csrf_field() ?>
                 <label class="form-field">

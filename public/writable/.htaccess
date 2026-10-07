@@ -4,5 +4,3 @@
 <IfModule !authz_core_module>
 	Deny from all
 </IfModule>
-
-

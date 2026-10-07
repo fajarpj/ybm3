@@ -10,8 +10,10 @@ class AuthController extends BaseController
     {
         $ip = (string) service('request')->getIPAddress();
         $id = trim(strtolower((string) $identifier));
+        $safePrefix = preg_replace('/[^a-z0-9_-]/i', '-', $prefix) ?: 'auth';
+        $safeIp = preg_replace('/[^a-z0-9_-]/i', '-', $ip) ?: 'ip';
 
-        return $prefix . ':' . $ip . ($id !== '' ? ':' . sha1($id) : '');
+        return $safePrefix . '-' . $safeIp . ($id !== '' ? '-' . sha1($id) : '');
     }
 
     private function publicRegistrationEnabled(): bool
@@ -30,7 +32,16 @@ class AuthController extends BaseController
 
     public function attemptLogin()
     {
-        $email = (string) $this->request->getPost('email');
+        $rules = [
+            'email'    => 'required|valid_email|max_length[150]',
+            'password' => 'required|max_length[255]',
+        ];
+
+        if (! $this->validate($rules)) {
+            return redirect()->back()->withInput()->with('error', 'Mohon isi email dan password dengan benar.');
+        }
+
+        $email = strtolower(trim((string) $this->request->getPost('email')));
         $throttler = service('throttler');
 
         if (! $throttler->check($this->throttleKey('login', $email), 5, MINUTE)) {
@@ -76,7 +87,7 @@ class AuthController extends BaseController
             return redirect()->to(site_url('login'))->with('error', 'Pendaftaran akun publik saat ini dinonaktifkan.');
         }
 
-        $email = (string) $this->request->getPost('email');
+        $email = strtolower(trim((string) $this->request->getPost('email')));
         $throttler = service('throttler');
 
         if (! $throttler->check($this->throttleKey('register', $email), 3, MINUTE * 5)) {

@@ -50,7 +50,7 @@
                 <div class="hero-donation-inline__meta">
                     <div>
                         <strong><?= esc((string) $donationOverview['donationCount']) ?></strong>
-                        <span>Donasi masuk</span>
+                        <span>Program terisi</span>
                     </div>
                     <div>
                         <strong><?= esc((string) $donationOverview['activePrograms']) ?></strong>
@@ -153,8 +153,8 @@
 <section class="section section--soft">
     <div class="container cta-banner">
         <div>
-            <p class="eyebrow">YB3M Peduli</p>
-            <h2>Salam hormat kami, Pengurus YB3M Peduli</h2>
+            <p class="eyebrow">YBM3</p>
+            <h2>Salam hormat kami, Pengurus YBM3</h2>
         </div>
         <div class="cta-banner__actions">
             <a class="button button--primary" href="<?= site_url('donasi') ?>">Buka Donasi</a>

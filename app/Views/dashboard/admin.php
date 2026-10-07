@@ -19,8 +19,8 @@
         <?php endif; ?>
 
         <div class="stats-grid">
-            <article class="info-card"><p class="panel__label">Total Donasi</p><h3><?= esc((string) $donationCount) ?></h3></article>
-            <article class="info-card"><p class="panel__label">Dana Terkonfirmasi</p><h3>Rp<?= number_format((float) $totalRaised, 0, ',', '.') ?></h3></article>
+            <article class="info-card"><p class="panel__label">Program Terisi</p><h3><?= esc((string) $filledProgramCount) ?></h3></article>
+            <article class="info-card"><p class="panel__label">Dana Terkumpul Manual</p><h3>Rp<?= number_format((float) $totalRaised, 0, ',', '.') ?></h3></article>
             <article class="info-card"><p class="panel__label">User</p><h3><?= esc((string) $userCount) ?></h3></article>
             <article class="info-card"><p class="panel__label">Program</p><h3><?= esc((string) $programCount) ?></h3></article>
             <article class="info-card"><p class="panel__label">Galeri</p><h3><?= esc((string) $galleryCount) ?></h3></article>
@@ -31,23 +31,23 @@
 <section class="section section--muted">
     <div class="container admin-stack">
         <article class="panel">
-            <p class="panel__label">Midtrans Testing</p>
-            <h2>Konfigurasi payment gateway</h2>
+            <p class="panel__label">QRIS Manual</p>
+            <h2>Kelola nominal dana terkumpul</h2>
             <div class="admin-config-grid">
                 <div class="info-card">
-                    <p class="panel__label">Mode</p>
-                    <h3><?= esc($midtransMode) ?></h3>
-                    <p><?= $midtransReady ? 'Sandbox key sudah terbaca dari environment dan siap untuk testing transaksi.' : 'Key Midtrans belum lengkap di environment.' ?></p>
+                    <p class="panel__label">Sumber Dana</p>
+                    <h3>QRIS YBM3</h3>
+                    <p>Setiap dana yang masuk melalui QRIS dicatat manual oleh admin pada data program.</p>
                 </div>
                 <div class="info-card">
-                    <p class="panel__label">Merchant ID</p>
-                    <h3><?= esc($midtransMerchant !== '' ? $midtransMerchant : '-') ?></h3>
-                    <p>Gunakan mode sandbox sampai akun Midtrans production disetujui.</p>
+                    <p class="panel__label">Update Progress</p>
+                    <h3>Dana terkumpul</h3>
+                    <p>Edit program, isi nominal pada kolom dana terkumpul, lalu simpan perubahan.</p>
                 </div>
                 <div class="info-card">
-                    <p class="panel__label">Client Key</p>
-                    <h3><?= esc($midtransClient !== '' ? substr($midtransClient, 0, 18) . '...' : '-') ?></h3>
-                    <p>Callback notifikasi tetap diarahkan ke endpoint website saat testing.</p>
+                    <p class="panel__label">Tampilan Publik</p>
+                    <h3>Otomatis berubah</h3>
+                    <p>Beranda, halaman program, dan detail program mengambil angka dari input manual ini.</p>
                 </div>
             </div>
         </article>
@@ -108,6 +108,11 @@
                     <label class="form-field">
                         <span>Target dana</span>
                         <input type="number" name="target_dana" min="1000" step="1000" value="<?= esc(old('target_dana', $editingProgram['target_dana'] ?? '')) ?>" placeholder="100000000">
+                    </label>
+                    <label class="form-field">
+                        <span>Dana terkumpul</span>
+                        <input type="number" name="terkumpul" min="0" step="1000" value="<?= esc(old('terkumpul', $editingProgram['terkumpul'] ?? 0)) ?>" placeholder="0">
+                        <small class="form-helper">Isi manual sesuai dana QRIS yang sudah masuk untuk program ini.</small>
                     </label>
                     <label class="form-field">
                         <span>Status</span>

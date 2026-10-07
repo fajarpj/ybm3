@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\Libraries\DonationStats;
-use App\Libraries\MidtransGateway;
 use App\Models\DonationModel;
 use App\Models\GalleryModel;
 use App\Models\ProgramModel;
@@ -13,6 +12,7 @@ class DashboardController extends BaseController
 {
     private const PROGRAM_UPLOAD_DIR = 'assets/images/uploads/programs';
     private const GALLERY_UPLOAD_DIR = 'assets/images/uploads/galleries';
+    private const DEFAULT_PROGRAM_IMAGE = 'assets/images/gallery/kurban.jpg';
 
     public function user(): string
     {
@@ -49,13 +49,18 @@ class DashboardController extends BaseController
         $rules = [
             'judul'       => 'required|min_length[5]|max_length[180]',
             'deskripsi'   => 'required|min_length[20]',
-            'target_dana' => 'required|decimal|greater_than[0]',
+            'target_dana' => 'required|numeric|greater_than_equal_to[1000]',
+            'terkumpul'   => 'permit_empty|numeric|greater_than_equal_to[0]',
             'status'      => 'required|in_list[aktif,selesai]',
-            'gambar_file' => 'uploaded[gambar_file]|is_image[gambar_file]|mime_in[gambar_file,image/jpg,image/jpeg,image/png,image/webp]|max_size[gambar_file,4096]',
         ];
 
+        $programFile = $this->request->getFile('gambar_file');
+        if ($programFile && $programFile->getError() !== UPLOAD_ERR_NO_FILE) {
+            $rules['gambar_file'] = 'is_image[gambar_file]|mime_in[gambar_file,image/jpg,image/jpeg,image/png,image/webp]|max_size[gambar_file,4096]';
+        }
+
         if (! $this->validate($rules)) {
-            return redirect()->back()->withInput()->with('error', 'Data program belum lengkap atau belum valid.');
+            return redirect()->back()->withInput()->with('error', $this->validationErrorMessage('Data program belum lengkap atau belum valid.'));
         }
 
         $slug = $this->buildUniqueSlug(
@@ -64,7 +69,7 @@ class DashboardController extends BaseController
             (string) $this->request->getPost('judul')
         );
         try {
-            $imagePath = $this->storeUploadedImage('gambar_file', self::PROGRAM_UPLOAD_DIR);
+            $imagePath = $this->storeUploadedImage('gambar_file', self::PROGRAM_UPLOAD_DIR, self::DEFAULT_PROGRAM_IMAGE);
         } catch (\RuntimeException $exception) {
             return redirect()->back()->withInput()->with('error', $exception->getMessage());
         }
@@ -76,7 +81,7 @@ class DashboardController extends BaseController
             'target_dana' => $this->request->getPost('target_dana'),
             'gambar'      => $imagePath,
             'status'      => $this->request->getPost('status'),
-            'terkumpul'   => 0,
+            'terkumpul'   => $this->request->getPost('terkumpul') ?: 0,
         ]);
 
         return redirect()->to(site_url('admin'))->with('success', 'Program baru berhasil ditambahkan.');
@@ -94,7 +99,8 @@ class DashboardController extends BaseController
         $rules = [
             'judul'       => 'required|min_length[5]|max_length[180]',
             'deskripsi'   => 'required|min_length[20]',
-            'target_dana' => 'required|decimal|greater_than[0]',
+            'target_dana' => 'required|numeric|greater_than_equal_to[1000]',
+            'terkumpul'   => 'permit_empty|numeric|greater_than_equal_to[0]',
             'status'      => 'required|in_list[aktif,selesai]',
         ];
 
@@ -104,7 +110,7 @@ class DashboardController extends BaseController
         }
 
         if (! $this->validate($rules)) {
-            return redirect()->back()->withInput()->with('error', 'Perubahan program belum valid.');
+            return redirect()->back()->withInput()->with('error', $this->validationErrorMessage('Perubahan program belum valid.'));
         }
 
         $slug = $this->buildUniqueSlug(
@@ -124,6 +130,7 @@ class DashboardController extends BaseController
             'slug'        => $slug,
             'deskripsi'   => $this->request->getPost('deskripsi'),
             'target_dana' => $this->request->getPost('target_dana'),
+            'terkumpul'   => $this->request->getPost('terkumpul') ?: 0,
             'gambar'      => $imagePath,
             'status'      => $this->request->getPost('status'),
         ]);
@@ -458,11 +465,15 @@ class DashboardController extends BaseController
         $authUser = auth_user();
         $adminProfile = $userModel->find($authUser['id'] ?? 0);
         $programs = $programModel->orderBy('id', 'DESC')->findAll();
-        $paidTotals = $donationModel
-            ->selectSum('amount')
-            ->where('payment_status', 'paid')
-            ->first();
-        $midtrans = new MidtransGateway();
+        $manualTotalRaised = array_reduce(
+            $programs,
+            static fn (float $carry, array $program): float => $carry + (float) ($program['terkumpul'] ?? 0),
+            0.0
+        );
+        $filledProgramCount = count(array_filter(
+            $programs,
+            static fn (array $program): bool => (float) ($program['terkumpul'] ?? 0) > 0
+        ));
         $programIndex = [];
 
         foreach ($programs as $program) {
@@ -474,8 +485,8 @@ class DashboardController extends BaseController
             'description'    => 'Kelola donasi, user, program, galeri, dan pengaturan operasional yayasan.',
             'authUser'       => $authUser,
             'adminProfile'   => $adminProfile,
-            'donationCount'  => $donationModel->countAllResults(),
-            'totalRaised'    => $paidTotals['amount'] ?? 0,
+            'filledProgramCount' => $filledProgramCount,
+            'totalRaised'    => $manualTotalRaised,
             'userCount'      => $userModel->countAllResults(),
             'programCount'   => $programModel->countAllResults(),
             'galleryCount'   => $galleryModel->countAllResults(),
@@ -487,10 +498,6 @@ class DashboardController extends BaseController
             'editingProgram' => null,
             'editingGallery' => null,
             'editingUser'    => null,
-            'midtransReady'  => $midtrans->isConfigured(),
-            'midtransMode'   => $midtrans->isProduction() ? 'Production' : 'Sandbox',
-            'midtransClient' => $midtrans->clientKey(),
-            'midtransMerchant' => $midtrans->merchantId(),
         ], $overrides)));
     }
 
@@ -529,8 +536,12 @@ class DashboardController extends BaseController
         if ($file && $file->isValid() && ! $file->hasMoved()) {
             $targetDirectory = rtrim(FCPATH . str_replace('/', DIRECTORY_SEPARATOR, $relativeDirectory), DIRECTORY_SEPARATOR);
 
-            if (! is_dir($targetDirectory)) {
-                mkdir($targetDirectory, 0777, true);
+            if (! is_dir($targetDirectory) && ! mkdir($targetDirectory, 0775, true)) {
+                throw new \RuntimeException('Folder upload belum tersedia atau tidak bisa dibuat di hosting.');
+            }
+
+            if (! is_writable($targetDirectory)) {
+                throw new \RuntimeException('Folder upload tidak dapat ditulis. Periksa permission folder assets/images/uploads di hosting.');
             }
 
             $newName = $file->getRandomName();
@@ -544,5 +555,17 @@ class DashboardController extends BaseController
         }
 
         throw new \RuntimeException('File gambar belum dipilih atau gagal diunggah.');
+    }
+
+    private function validationErrorMessage(string $fallback): string
+    {
+        $validation = service('validation');
+        $errors = $validation->getErrors();
+
+        if ($errors === []) {
+            return $fallback;
+        }
+
+        return $fallback . ' Detail: ' . implode(' ', array_values($errors));
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\Libraries\DonationStats;
-use App\Libraries\MidtransGateway;
 use App\Models\DonationModel;
 use App\Models\GalleryModel;
 use App\Models\ProgramModel;
@@ -12,22 +11,22 @@ class Home extends BaseController
 {
     private array $site = [
         'name'         => 'Yayasan Bakti Mulya Masyarakat Mandiri',
-        'shortName'    => 'YB3M Peduli',
+        'shortName'    => 'YBM3',
         'tagline'      => 'Menguatkan bakti sosial, pendidikan, dan kemandirian umat melalui pengelolaan donasi yang amanah.',
         'address'      => 'Sekretariat Yayasan Bakti Mulya Masyarakat Mandiri, Indonesia.',
         'officeNote'   => 'Informasi operasional, program, dan penyaluran manfaat dikelola langsung oleh pengurus yayasan.',
-        'email'        => 'admin@yb3mpeduli.org',
-        'phone'        => '0853 5340 0700',
-        'website'      => 'ybkb.org',
+        'email'        => 'ybm3peduli2023@gmail.com',
+        'phone'        => '085712759526',
+        'website'      => 'yayasanybm3.page.gd',
         'bankAccounts' => [
             ['bank' => 'BRI', 'number' => '6877-01-008170-53-3'],
             ['bank' => 'Mandiri', 'number' => '138-00-1874846-2'],
         ],
         'bankHolder'   => 'Yayasan Bakti Mulya Masyarakat Mandiri',
         'socials'      => [
-            ['label' => 'Website', 'value' => 'ybkb.org', 'url' => 'https://ybkb.org'],
-            ['label' => 'YouTube', 'value' => '@ybkbindonesia', 'url' => 'https://www.youtube.com/@ybkbindonesia'],
-            ['label' => 'Instagram', 'value' => '@ybkbindonesia', 'url' => 'https://www.instagram.com/ybkbindonesia'],
+            ['label' => 'Facebook', 'value' => 'YBM3 Peduli', 'url' => 'https://www.facebook.com/share/17o4pbdtJS/?mibextid=wwXIfr'],
+            ['label' => 'Instagram', 'value' => '@ybm3peduli', 'url' => 'https://www.instagram.com/ybm3peduli?igsh=MTM5anl1aXY4b2YwNQ=='],
+            ['label' => 'YouTube', 'value' => '@ybm3peduli2023', 'url' => 'https://www.youtube.com/@ybm3peduli2023'],
         ],
         'heroMetrics'  => [
             ['value' => 'Amanah', 'label' => 'pengelolaan dana yang tertata'],
@@ -76,7 +75,7 @@ class Home extends BaseController
                 ],
                 [
                     'title'       => 'Donasi legal siap live',
-                    'description' => 'Integrasi Midtrans disiapkan sebagai payment gateway resmi dan data transaksi disimpan ke database untuk dashboard admin maupun user.',
+                    'description' => 'Donasi digital difokuskan melalui QRIS resmi YBM3 agar donatur dapat menyalurkan kebaikan langsung dari mobile banking atau e-wallet.',
                 ],
             ],
             'quickPrograms' => [
@@ -131,7 +130,6 @@ class Home extends BaseController
         $programModel = new ProgramModel();
         $donationModel = new DonationModel();
         $donationStats = new DonationStats();
-        $midtrans = new MidtransGateway();
 
         $program = $programModel->where('slug', $slug)->first();
 
@@ -152,9 +150,6 @@ class Home extends BaseController
             'description'      => $program['deskripsi'],
             'program'          => $program,
             'recentDonors'     => $recentDonors,
-            'midtransReady'    => $midtrans->isConfigured(),
-            'gatewayOptions'   => ['Midtrans Snap'],
-            'suggestedAmounts' => [50000, 100000, 250000, 500000],
         ]));
     }
 
@@ -172,7 +167,6 @@ class Home extends BaseController
     public function donation(): string
     {
         $programModel = new ProgramModel();
-        $midtrans = new MidtransGateway();
         $donationStats = new DonationStats();
         $paidMap = $donationStats->getPaidProgramMap();
         $programs = array_map(
@@ -184,12 +178,6 @@ class Home extends BaseController
             'title'           => 'Donasi',
             'description'     => 'Salurkan donasi terbaik Anda untuk mendukung program Yayasan Bakti Mulya Masyarakat Mandiri.',
             'programOptions'  => $programs,
-            'donationSteps'   => [
-                'Login atau daftar agar donasi otomatis tercatat di dashboard user.',
-                'Pilih nominal dan program, lalu lanjutkan pembayaran melalui Midtrans Snap.',
-                'Admin dan user dapat memantau status transaksi dari dashboard secara langsung.',
-            ],
-            'midtransReady'   => $midtrans->isConfigured(),
         ]));
     }
 
@@ -209,7 +197,7 @@ class Home extends BaseController
                 [
                     'title'   => 'Tujuan penggunaan data',
                     'content' => [
-                        'Data digunakan untuk mencatat donasi, memproses pembayaran melalui payment gateway resmi, menampilkan riwayat transaksi kepada pengguna, dan mendukung administrasi yayasan.',
+                        'Data digunakan untuk mendukung administrasi yayasan, konfirmasi donasi QRIS jika diperlukan, dan peningkatan layanan website.',
                         'Kami juga dapat menggunakan data kontak untuk memberikan konfirmasi transaksi, pembaruan status donasi, atau informasi layanan yang relevan dengan aktivitas pengguna.',
                     ],
                 ],
@@ -223,7 +211,7 @@ class Home extends BaseController
                 [
                     'title'   => 'Pembagian data kepada pihak ketiga',
                     'content' => [
-                        'Kami tidak memperjualbelikan data pribadi pengguna. Data tertentu dapat diteruskan secara terbatas kepada penyedia layanan resmi seperti payment gateway untuk menyelesaikan proses transaksi.',
+                        'Kami tidak memperjualbelikan data pribadi pengguna. Data tertentu hanya dapat diteruskan secara terbatas kepada pihak resmi apabila diperlukan untuk verifikasi donasi atau kepatuhan hukum.',
                         'Pihak ketiga yang terlibat hanya menerima data yang diperlukan untuk menjalankan layanan yang diminta pengguna.',
                     ],
                 ],
@@ -261,8 +249,8 @@ class Home extends BaseController
                 [
                     'title'   => 'Ketentuan donasi',
                     'content' => [
-                        'Donasi yang dilakukan melalui website akan diproses melalui payment gateway resmi atau mekanisme lain yang diumumkan oleh yayasan.',
-                        'Pengguna wajib memastikan data donasi, nominal, dan program tujuan yang dipilih sudah sesuai sebelum menyelesaikan pembayaran.',
+                        'Donasi melalui website diarahkan menggunakan QRIS resmi YBM3 yang ditampilkan pada halaman donasi.',
+                        'Pengguna wajib memastikan nama penerima QRIS dan nominal yang diisi pada aplikasi pembayaran sudah sesuai sebelum menyelesaikan transaksi.',
                     ],
                 ],
                 [
@@ -306,7 +294,7 @@ class Home extends BaseController
                 [
                     'title'   => 'Proses peninjauan',
                     'content' => [
-                        'Setiap permohonan akan diverifikasi oleh pengurus yayasan berdasarkan data transaksi internal, catatan payment gateway, dan bukti pendukung dari pengguna.',
+                        'Setiap permohonan akan diverifikasi oleh pengurus yayasan berdasarkan data internal, bukti transaksi QRIS, dan bukti pendukung dari pengguna.',
                         'Yayasan berhak meminta informasi tambahan sebelum memberikan keputusan akhir atas permohonan tersebut.',
                     ],
                 ],
@@ -320,99 +308,37 @@ class Home extends BaseController
         ]));
     }
 
-    public function submitDonation()
+    public function sitemap()
     {
-        $rules = [
-            'donor_name'      => 'required|min_length[3]|max_length[150]',
-            'amount'          => 'required|decimal|greater_than[9999]',
-            'payment_gateway' => 'required|max_length[50]',
+        $programModel = new ProgramModel();
+        $urls = [
+            ['loc' => site_url('/'), 'priority' => '1.0'],
+            ['loc' => site_url('tentang'), 'priority' => '0.8'],
+            ['loc' => site_url('program'), 'priority' => '0.8'],
+            ['loc' => site_url('gallery'), 'priority' => '0.7'],
+            ['loc' => site_url('donasi'), 'priority' => '0.8'],
+            ['loc' => site_url('kebijakan-privasi'), 'priority' => '0.3'],
+            ['loc' => site_url('syarat-ketentuan'), 'priority' => '0.3'],
+            ['loc' => site_url('kebijakan-pengembalian-dana'), 'priority' => '0.3'],
         ];
 
-        if (! $this->validate($rules)) {
-            return redirect()->back()->withInput()->with('error', 'Mohon lengkapi data donasi dengan benar.');
-        }
-
-        $programId = $this->request->getPost('program_id') ?: null;
-        $donationModel = new DonationModel();
-        $midtrans = new MidtransGateway();
-        $user = auth_user();
-        $selectedGateway = 'Midtrans Snap';
-        $paymentChannel = 'snap_auto';
-        $programTitle = 'Donasi Umum';
-
-        if ($programId) {
-            $program = (new ProgramModel())->find($programId);
-
-            if (! $program) {
-                return redirect()->back()->withInput()->with('error', 'Program donasi tidak ditemukan.');
+        foreach ($programModel->orderBy('id', 'DESC')->findAll() as $program) {
+            if (! empty($program['slug'])) {
+                $urls[] = ['loc' => site_url('program/' . $program['slug']), 'priority' => '0.6'];
             }
-
-            if (($program['status'] ?? 'aktif') !== 'aktif') {
-                return redirect()->back()->withInput()->with('error', 'Program ini sudah selesai dan tidak menerima donasi baru.');
-            }
-
-            $programTitle = $program['judul'] ?? $programTitle;
         }
 
-        $orderId = 'YB3M-' . date('YmdHis') . '-' . random_int(1000, 9999);
-        $transactionCode = 'DON-' . strtoupper(bin2hex(random_bytes(4)));
-
-        $donationId = $donationModel->insert([
-            'user_id'          => $user['id'] ?? null,
-            'donor_name'       => $this->request->getPost('donor_name'),
-            'donor_phone'      => $this->request->getPost('donor_phone'),
-            'program_id'       => $programId,
-            'amount'           => $this->request->getPost('amount'),
-            'payment_method'   => $paymentChannel,
-            'provider'         => 'midtrans',
-            'order_id'         => $orderId,
-            'payment_gateway'  => $selectedGateway,
-            'payment_channel'  => $paymentChannel,
-            'payment_status'   => 'pending',
-            'provider_status'  => 'pending',
-            'transaction_code' => $transactionCode,
-            'message'          => $this->request->getPost('message'),
-        ], true);
-
-        if (! $midtrans->isConfigured()) {
-            return redirect()->to(site_url('donasi'))->with('error', 'Midtrans belum dikonfigurasi. Isi server key dan client key terlebih dahulu.');
-        }
-
-        try {
-            $transaction = $midtrans->createTransaction([
-                'transaction_details' => [
-                    'order_id'     => $orderId,
-                    'gross_amount' => (int) $this->request->getPost('amount'),
-                ],
-                'item_details' => [[
-                    'id'       => (string) ($programId ?: 'general'),
-                    'price'    => (int) $this->request->getPost('amount'),
-                    'quantity' => 1,
-                    'name'     => $programTitle,
-                ]],
-                'customer_details' => [
-                    'first_name' => $this->request->getPost('donor_name'),
-                    'email'      => $user['email'] ?? ('guest+' . $orderId . '@yb3m.local'),
-                    'phone'      => $this->request->getPost('donor_phone'),
-                ],
-                'callbacks' => [
-                    'finish' => site_url('payment/finish'),
-                ],
-            ]);
-        } catch (\Throwable $exception) {
-            return redirect()->to(site_url('donasi'))->with('error', 'Gagal membuat transaksi Midtrans: ' . $exception->getMessage());
-        }
-
-        $donationModel->update($donationId, [
-            'snap_token'  => $transaction->token ?? null,
-            'payment_url' => $transaction->redirect_url ?? null,
+        $xml = view('sitemap', [
+            'urls' => $urls,
+            'date' => date('Y-m-d'),
         ]);
 
-        if (! empty($transaction->redirect_url)) {
-            return redirect()->to($transaction->redirect_url);
-        }
+        return $this->response->setContentType('application/xml')->setBody($xml);
+    }
 
-        return redirect()->to(site_url('donasi'))->with('success', 'Donasi berhasil dicatat. Silakan lanjutkan pembayaran melalui Midtrans Snap.');
+    public function submitDonation()
+    {
+        return redirect()->to(site_url('donasi'))->with('success', 'Silakan scan QRIS YBM3 untuk melanjutkan donasi.');
     }
 
     private function pageData(array $data = []): array
@@ -436,7 +362,7 @@ class Home extends BaseController
         $program['donor_count'] = $donorCount;
         $program['progress_percent'] = min(100, (int) round(($raised / $target) * 100));
         $program['days_label'] = $program['status'] === 'selesai' ? 'Program Selesai' : 'Donasi Dibuka';
-        $program['donation_label'] = $donorCount > 0 ? $donorCount . ' donatur' : 'Menunggu donasi pertama';
+        $program['donation_label'] = $raised > 0 ? 'Dana tercatat manual' : 'Menunggu input dana';
 
         return $program;
     }

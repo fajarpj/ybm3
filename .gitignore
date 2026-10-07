@@ -26,6 +26,8 @@
 !/public/writable/session/index.html
 /public/writable/uploads/*
 !/public/writable/uploads/index.html
+/public/writable/*
+!/public/writable/.htaccess
 
 Thumbs.db
 .DS_Store

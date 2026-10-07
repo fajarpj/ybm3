@@ -100,63 +100,18 @@
         <aside class="program-sidebar">
             <article class="panel donation-card-sticky">
                 <p class="panel__label">Ayo Berdonasi</p>
-                <h2><?= $program['status'] === 'aktif' ? 'Dukung program ini sekarang' : 'Program ini telah selesai' ?></h2>
+                <h2><?= $program['status'] === 'aktif' ? 'Scan QRIS untuk mendukung program ini' : 'Program ini telah selesai' ?></h2>
                 <p class="sidebar-copy">
                     <?= $program['status'] === 'aktif'
-                        ? 'Form cepat ini dibuat seperti pola campaign modern: fokus, ringkas, dan tetap nyaman dipakai di layar kecil.'
+                        ? 'Donasi dilakukan langsung melalui QRIS YBM3. Isi nominal dari aplikasi mobile banking atau e-wallet Anda setelah QRIS dipindai.'
                         : 'Pengurus telah menandai program ini sebagai selesai, sehingga donasi baru untuk campaign ini sudah ditutup.' ?>
                 </p>
 
-                <?php if (session()->getFlashdata('success')): ?>
-                    <div class="alert alert--success"><?= esc(session()->getFlashdata('success')) ?></div>
-                <?php endif; ?>
-                <?php if (session()->getFlashdata('error')): ?>
-                    <div class="alert alert--error"><?= esc(session()->getFlashdata('error')) ?></div>
-                <?php endif; ?>
-                <?php if (! $midtransReady): ?>
-                    <div class="alert alert--warn">Midtrans belum dikonfigurasi. Isi `server key` dan `client key` lebih dulu agar transaksi bisa dibuat.</div>
-                <?php endif; ?>
-
                 <?php if ($program['status'] === 'aktif'): ?>
-                    <div class="amount-pills">
-                        <?php foreach ($suggestedAmounts as $amount): ?>
-                            <button type="button" class="amount-pill" data-amount-pill="<?= esc((string) $amount) ?>">Rp<?= number_format((float) $amount, 0, ',', '.') ?></button>
-                        <?php endforeach; ?>
+                    <div class="program-qris-mini">
+                        <img src="<?= base_url('assets/images/payment/qris-ybm3.png') ?>" alt="QRIS donasi YBM3">
                     </div>
-
-                    <form class="donation-form donation-form--single" action="<?= site_url('donasi/kirim') ?>" method="post">
-                        <?= csrf_field() ?>
-                        <input type="hidden" name="program_id" value="<?= esc((string) $program['id']) ?>">
-                        <label class="form-field">
-                            <span>Nama donatur</span>
-                            <input type="text" name="donor_name" value="<?= old('donor_name', $authUser['name'] ?? '') ?>" placeholder="Nama lengkap">
-                        </label>
-                        <label class="form-field">
-                            <span>No. HP</span>
-                            <input type="text" name="donor_phone" value="<?= old('donor_phone') ?>" placeholder="08xxxxxxxxxx">
-                        </label>
-                        <label class="form-field">
-                            <span>Nominal donasi</span>
-                            <input type="number" id="quick-donation-amount" name="amount" value="<?= old('amount') ?>" min="10000" step="1000" placeholder="100000">
-                        </label>
-                        <label class="form-field">
-                            <span>Payment gateway</span>
-                            <input type="hidden" name="payment_gateway" value="Midtrans Snap">
-                            <div class="gateway-fixed-card">
-                                <strong>Midtrans Snap</strong>
-                                <p>QRIS, virtual account, e-wallet, dan metode aktif lainnya akan muncul di halaman Midtrans setelah form dikirim.</p>
-                            </div>
-                        </label>
-                        <div class="form-field gateway-note">
-                            <span>Metode pembayaran Midtrans</span>
-                            <p>Setelah lanjut, pilihan seperti QRIS, Virtual Account, GoPay, ShopeePay, dan metode aktif lainnya akan muncul langsung di Snap Midtrans.</p>
-                        </div>
-                        <label class="form-field">
-                            <span>Pesan</span>
-                            <textarea name="message" rows="3" placeholder="Doa atau keterangan singkat"><?= old('message') ?></textarea>
-                        </label>
-                        <button class="button button--primary donation-card-sticky__button" type="submit">Donasi Sekarang</button>
-                    </form>
+                    <a class="button button--primary donation-card-sticky__button" href="<?= site_url('donasi') ?>">Buka QRIS Donasi</a>
                 <?php else: ?>
                     <div class="program-closed-note">
                         <strong>Donasi ditutup</strong>
@@ -168,22 +123,4 @@
         </aside>
     </div>
 </section>
-
-<script>
-    (() => {
-        const amountInput = document.getElementById('quick-donation-amount');
-        const pills = document.querySelectorAll('[data-amount-pill]');
-
-        if (!amountInput || !pills.length) {
-            return;
-        }
-
-        pills.forEach((pill) => {
-            pill.addEventListener('click', () => {
-                amountInput.value = pill.getAttribute('data-amount-pill');
-                amountInput.focus();
-            });
-        });
-    })();
-</script>
 <?= $this->endSection() ?>

@@ -30,12 +30,12 @@ abstract class BaseController extends Controller
     protected $helpers = ['form', 'url', 'auth'];
     protected array $siteData = [
         'name'         => 'Yayasan Bakti Mulya Masyarakat Mandiri',
-        'shortName'    => 'YB3M Peduli',
+        'shortName'    => 'YBM3',
         'tagline'      => 'Menguatkan bakti sosial, pendidikan, dan kemandirian umat melalui pengelolaan donasi yang amanah.',
         'address'      => 'Sekretariat Yayasan Bakti Mulya Masyarakat Mandiri, Indonesia.',
         'officeNote'   => 'Informasi operasional, program, dan penyaluran manfaat dikelola langsung oleh pengurus yayasan.',
-        'email'        => 'admin@yb3mpeduli.org',
-        'phone'        => '0853 5340 0700',
+        'email'        => 'ybm3peduli2023@gmail.com',
+        'phone'        => '085712759526',
         'website'      => 'ybkb.org',
         'bankAccounts' => [
             ['bank' => 'BRI', 'number' => '6877-01-008170-53-3'],
@@ -43,9 +43,9 @@ abstract class BaseController extends Controller
         ],
         'bankHolder'   => 'Yayasan Bakti Mulya Masyarakat Mandiri',
         'socials'      => [
-            ['label' => 'Website', 'value' => 'ybkb.org', 'url' => 'https://ybkb.org'],
-            ['label' => 'YouTube', 'value' => '@ybkbindonesia', 'url' => 'https://www.youtube.com/@ybkbindonesia'],
-            ['label' => 'Instagram', 'value' => '@ybkbindonesia', 'url' => 'https://www.instagram.com/ybkbindonesia'],
+            ['label' => 'Facebook', 'value' => 'YBM3 Peduli', 'url' => 'https://www.facebook.com/share/17o4pbdtJS/?mibextid=wwXIfr'],
+            ['label' => 'Instagram', 'value' => '@ybm3peduli', 'url' => 'https://www.instagram.com/ybm3peduli?igsh=MTM5anl1aXY4b2YwNQ=='],
+            ['label' => 'YouTube', 'value' => '@ybm3peduli2023', 'url' => 'https://www.youtube.com/@ybm3peduli2023'],
         ],
     ];
 
