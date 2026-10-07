@@ -12,13 +12,19 @@ class SetLocalAdminAccount extends Migration
             return;
         }
 
-        $adminEmail = 'adminybm3@gmail.com';
+        $adminEmail = env('SEED_ADMIN_EMAIL', 'adminybm3@gmail.com');
+        $adminPassword = env('SEED_ADMIN_PASSWORD');
+
+        if (! $adminPassword) {
+            return;
+        }
+
         $now = date('Y-m-d H:i:s');
         $payload = [
             'name'          => 'Administrator YBM3',
             'email'         => $adminEmail,
             'phone'         => null,
-            'password_hash' => password_hash('admybm32023', PASSWORD_DEFAULT),
+            'password_hash' => password_hash($adminPassword, PASSWORD_DEFAULT),
             'role'          => 'admin',
             'is_active'     => 1,
             'updated_at'    => $now,

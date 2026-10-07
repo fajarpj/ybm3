@@ -105,13 +105,16 @@ class AddUsersAndPaymentFields extends Migration
             }
         }
 
-        $adminExists = $this->db->table('users')->where('email', 'admin@yb3m.local')->countAllResults();
-        if ($adminExists === 0) {
+        $adminEmail = env('SEED_ADMIN_EMAIL', 'admin@yb3m.local');
+        $adminPassword = env('SEED_ADMIN_PASSWORD');
+
+        $adminExists = $this->db->table('users')->where('email', $adminEmail)->countAllResults();
+        if ($adminPassword && $adminExists === 0) {
             $this->db->table('users')->insert([
                 'name'          => 'Administrator YB3M',
-                'email'         => 'admin@yb3m.local',
+                'email'         => $adminEmail,
                 'phone'         => null,
-                'password_hash' => password_hash('Admin123!', PASSWORD_DEFAULT),
+                'password_hash' => password_hash($adminPassword, PASSWORD_DEFAULT),
                 'role'          => 'admin',
                 'is_active'     => 1,
                 'created_at'    => date('Y-m-d H:i:s'),

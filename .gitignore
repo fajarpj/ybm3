@@ -29,5 +29,9 @@
 /public/writable/*
 !/public/writable/.htaccess
 
+/upload-htdocs/
+/yayasan-core/
+/database/admin-local-account.sql
+
 Thumbs.db
 .DS_Store
